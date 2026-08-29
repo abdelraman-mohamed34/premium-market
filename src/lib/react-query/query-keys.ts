@@ -1,0 +1,18 @@
+export const queryKeys = {
+    auth: { session: ["auth", "session"] as const },
+    profiles: { all: ["profiles"] as const, me: ["profiles", "me"] as const, detail: (id: string) => ["profiles", id] as const },
+    courses: { all: ["courses"] as const, list: (tenantId?: string | null) => ["courses", "list", tenantId] as const, detail: (id: string) => ["courses", id] as const, sections: (id: string) => ["courses", id, "sections"] as const },
+    lessons: { detail: (id: string) => ["lessons", id] as const, progress: (id: string) => ["lesson-progress", id] as const, courseProgress: ["course-progress"] as const },
+    quizzes: { all: ["quizzes"] as const, detail: (id?: string) => ["quiz", id] as const, attempts: ["quiz-attempts"] as const, attempt: (id?: string) => ["quiz-attempt", id] as const, result: (id?: string) => ["quiz-result", id] as const, options: (id?: string) => ["quiz-options", id] as const },
+    assignments: { all: ["assignments"] as const, submissionsAll: ["assignment-submissions"] as const, submissions: (id?: string) => ["assignment-submissions", id] as const, submission: (id: string) => ["assignment-submission", id] as const },
+    live: { sessions: (courseId?: string) => ["live-sessions", courseId] as const, attendance: (id: string) => ["attendance", id] as const },
+    media: { all: ["media"] as const },
+    conversations: { all: ["conversations"] as const, messages: (id: string) => ["conversations", id, "messages"] as const },
+    notifications: { all: ["notifications"] as const, list: (filters: unknown) => ["notifications", filters] as const },
+    payments: { all: ["payments"] as const },
+    coupons: { all: ["coupons"] as const },
+    audit: { all: ["audit-logs"] as const, list: (filters: unknown) => ["audit-logs", filters] as const },
+    announcements: { list: (courseId: string) => ["announcements", courseId] as const },
+    certificates: { all: ["certificates"] as const },
+    enrollments: { all: ["enrollments"] as const },
+} as const;
