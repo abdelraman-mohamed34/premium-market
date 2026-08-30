@@ -22,12 +22,16 @@ export function proxy(request: NextRequest) {
         .split(":")[0]
         .toLowerCase();
 
-    let tenantSlug = hostname;
+    const queryTenantSlug = url.searchParams.get("tenantSlug");
 
-    if (hostname === rootDomain || hostname === "127.0.0.1" || hostname === "::1") {
-        tenantSlug = process.env.NEXT_PUBLIC_DEMO_TENANT_SLUG || "sandbox";
-    } else if (hostname.endsWith(`.${rootDomain}`)) {
-        tenantSlug = hostname.slice(0, -(rootDomain.length + 1));
+    let tenantSlug = queryTenantSlug || hostname;
+
+    if (!queryTenantSlug) {
+        if (hostname === rootDomain || hostname === "127.0.0.1" || hostname === "::1") {
+            tenantSlug = process.env.NEXT_PUBLIC_DEMO_TENANT_SLUG || "sandbox";
+        } else if (hostname.endsWith(`.${rootDomain}`)) {
+            tenantSlug = hostname.slice(0, -(rootDomain.length + 1));
+        }
     }
 
     const requestHeaders = new Headers(request.headers);

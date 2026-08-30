@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { Review } from '@/features/_components/reusable/product-card'
+import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
+import { useTenantSlug } from '@/app/shared/lib/providers/providers'
 
 type ProductReviewsProps = {
     rating?: number
@@ -25,7 +27,13 @@ export function StarRating({ rating = 0, size = 'w-4 h-4' }: { rating: number; s
     )
 }
 
-function ProductReviews({ rating = 0, reviewsCount = 0, reviews = [] }: ProductReviewsProps) {
+export default function ProductReviews({ rating = 0, reviewsCount = 0, reviews = [] }: ProductReviewsProps) {
+
+    const tenant_slug = useTenantSlug()
+    const slug = tenant_slug ?? ""
+    const { tenant, health } = useGraphood({ tenantSlug: slug })
+    console.log(tenant_slug)
+
     return (
         <section className="mt-16 pt-10 border-t border-gray-200 flex justify-center gap-8">
             <div className="space-y-4 w-full max-w-5xl">
@@ -52,5 +60,3 @@ function ProductReviews({ rating = 0, reviewsCount = 0, reviews = [] }: ProductR
         </section>
     )
 }
-
-export default ProductReviews
