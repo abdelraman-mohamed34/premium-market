@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
+import TenantLink from '@/shared/components/TenantLink' // التعديل هنا: استبدال next/link
 import { ShoppingBag, User, Search, Menu, X } from 'lucide-react'
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
 import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
@@ -32,21 +32,21 @@ export default function Header() {
 
                 {/* Store Brand / Logo */}
                 <div className="flex items-center gap-8">
-                    <Link href="/" className="text-xl font-bold tracking-tight text-black uppercase">
+                    <TenantLink href="/" className="text-xl font-bold tracking-tight text-black uppercase">
                         {tenantSlug || 'Store'}
-                    </Link>
+                    </TenantLink>
 
                     {/* Desktop Navigation Links */}
                     <nav className="hidden md:flex md:items-center md:gap-6 text-sm font-medium text-gray-700">
-                        <Link href="/products" className="transition hover:text-black">
+                        <TenantLink href="/products" className="transition hover:text-black">
                             المنتجات
-                        </Link>
-                        <Link href="/categories" className="transition hover:text-black">
+                        </TenantLink>
+                        <TenantLink href="/categories" className="transition hover:text-black">
                             التصنيفات
-                        </Link>
-                        <Link href="/offers" className="transition hover:text-black">
+                        </TenantLink>
+                        <TenantLink href="/offers" className="transition hover:text-black">
                             العروض
-                        </Link>
+                        </TenantLink>
                     </nav>
                 </div>
 
@@ -60,16 +60,16 @@ export default function Header() {
                         <Search className="h-5 w-5" />
                     </button>
 
-                    <Link
+                    <TenantLink
                         href="/profile"
                         aria-label="Account"
                         className="p-2 text-gray-700 transition hover:text-black"
                     >
                         <User className="h-5 w-5" />
-                    </Link>
+                    </TenantLink>
 
                     {/* Cart Icon with Badge */}
-                    <Link
+                    <TenantLink
                         href="/cart"
                         className="relative p-2 text-gray-700 transition hover:text-black"
                         aria-label="Cart"
@@ -80,7 +80,7 @@ export default function Header() {
                                 {itemCount}
                             </span>
                         )}
-                    </Link>
+                    </TenantLink>
                 </div>
             </div>
 
@@ -88,27 +88,27 @@ export default function Header() {
             {mobileMenuOpen && (
                 <div className="border-b border-gray-200 bg-white px-4 pt-2 pb-4 md:hidden">
                     <nav className="flex flex-col gap-3 text-sm font-medium text-gray-700">
-                        <Link
+                        <TenantLink
                             href="/products"
                             onClick={() => setMobileMenuOpen(false)}
                             className="py-1 transition hover:text-black"
                         >
                             المنتجات
-                        </Link>
-                        <Link
+                        </TenantLink>
+                        <TenantLink
                             href="/categories"
                             onClick={() => setMobileMenuOpen(false)}
                             className="py-1 transition hover:text-black"
                         >
                             التصنيفات
-                        </Link>
-                        <Link
+                        </TenantLink>
+                        <TenantLink
                             href="/offers"
                             onClick={() => setMobileMenuOpen(false)}
                             className="py-1 transition hover:text-black"
                         >
                             العروض
-                        </Link>
+                        </TenantLink>
                     </nav>
                 </div>
             )}

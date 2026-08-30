@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
+import TenantLink from '@/shared/components/TenantLink' // التعديل هنا: استبدال next/link بـ TenantLink
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -36,13 +36,20 @@ function LoginPage() {
 
     const onSubmit = (values: LoginFormData) => {
         setSubmitError(null)
-        mutate({ email: values.email, password: values.password }, { onSuccess: (result) => { if (result.success) router.push('/'); else setSubmitError(result.error) } })
+        mutate(
+            { email: values.email, password: values.password },
+            {
+                onSuccess: (result) => {
+                    if (result.success) router.push('/')
+                    else setSubmitError(result.error)
+                },
+            }
+        )
     }
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
             <div className="w-full max-w-md space-y-8">
-
                 <div className="text-center">
                     <h1 className="text-2xl font-black uppercase tracking-tight text-gray-900">
                         Welcome Back
@@ -59,8 +66,13 @@ function LoginPage() {
                     </div>
                 )}
 
-                <form className="mt-8 space-y-5" onSubmit={handleSubmit(onSubmit, () => toast.error('Please check your email and password'))} noValidate>
-
+                <form
+                    className="mt-8 space-y-5"
+                    onSubmit={handleSubmit(onSubmit, () =>
+                        toast.error('Please check your email and password')
+                    )}
+                    noValidate
+                >
                     <div>
                         <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
                             Email Address
@@ -85,12 +97,13 @@ function LoginPage() {
                             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
                                 Password
                             </label>
-                            <Link
+                            {/* تحديث الرابط هنا */}
+                            <TenantLink
                                 href="/forgot-password"
                                 className="text-xs text-gray-500 hover:text-black hover:underline"
                             >
                                 Forgot Password?
-                            </Link>
+                            </TenantLink>
                         </div>
                         <div className="relative">
                             <input
@@ -125,7 +138,10 @@ function LoginPage() {
                             {...register('rememberMe')}
                             className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
                         />
-                        <label htmlFor="remember-me" className="ml-2 block text-xs text-gray-600 cursor-pointer">
+                        <label
+                            htmlFor="remember-me"
+                            className="ml-2 block text-xs text-gray-600 cursor-pointer"
+                        >
                             Remember me on this device
                         </label>
                     </div>
@@ -151,7 +167,9 @@ function LoginPage() {
                         <div className="w-full border-t border-gray-200" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-gray-400 font-semibold">Or continue with</span>
+                        <span className="bg-white px-2 text-gray-400 font-semibold">
+                            Or continue with
+                        </span>
                     </div>
                 </div>
 
@@ -196,11 +214,14 @@ function LoginPage() {
 
                 <p className="text-center text-xs text-gray-600">
                     Don&apos;t have an account?{' '}
-                    <Link href="/register" className="font-bold text-black hover:underline uppercase">
+                    {/* تحديث الرابط هنا */}
+                    <TenantLink
+                        href="/register"
+                        className="font-bold text-black hover:underline uppercase"
+                    >
                         Sign up
-                    </Link>
+                    </TenantLink>
                 </p>
-
             </div>
         </div>
     )

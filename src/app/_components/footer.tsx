@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, type FormEvent } from 'react'
-import Link from 'next/link'
+import TenantLink from '@/shared/components/TenantLink' // التعديل هنا: استبدال next/link
 import { ShieldCheck, Truck, RefreshCw, Send } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
@@ -14,7 +14,7 @@ export default function Footer() {
     const sandbox = isSandboxTenant(tenantSlug)
     const { tenantId } = useGraphood({ tenantSlug, enabled: !sandbox })
     const { data: products } = useStoreProducts(tenantSlug, tenantId)
-    const categoryLinks = [...new Set(products.flatMap(product => product.tags ?? []))].slice(0, 3)
+    const categoryLinks = [...new Set(products?.flatMap(product => product.tags ?? []) ?? [])].slice(0, 3)
     const storeName = tenantSlug ? tenantSlug.toUpperCase() : 'STORE'
 
     const handleSubscribe = (e: FormEvent) => {
@@ -67,14 +67,20 @@ export default function Footer() {
                         <h4 className="mb-4 text-sm font-bold text-black uppercase">روابط سريعة</h4>
                         <ul className="space-y-2.5 text-xs">
                             <li>
-                                <Link href="/products" className="transition hover:text-black">جميع المنتجات</Link>
+                                <TenantLink href="/products" className="transition hover:text-black">جميع المنتجات</TenantLink>
                             </li>
                             <li>
-                                <Link href="/categories" className="transition hover:text-black">التصنيفات</Link>
+                                <TenantLink href="/categories" className="transition hover:text-black">التصنيفات</TenantLink>
                             </li>
-                            {categoryLinks.map(category => <li key={category}><Link href={`/products?search=${encodeURIComponent(category)}`} className="transition hover:text-black">{category}</Link></li>)}
+                            {categoryLinks.map(category => (
+                                <li key={category}>
+                                    <TenantLink href={`/products?search=${encodeURIComponent(category)}`} className="transition hover:text-black">
+                                        {category}
+                                    </TenantLink>
+                                </li>
+                            ))}
                             <li>
-                                <Link href="/cart" className="transition hover:text-black">سلة التسوق</Link>
+                                <TenantLink href="/cart" className="transition hover:text-black">سلة التسوق</TenantLink>
                             </li>
                         </ul>
                     </div>
@@ -84,13 +90,13 @@ export default function Footer() {
                         <h4 className="mb-4 text-sm font-bold text-black uppercase">خدمة العملاء</h4>
                         <ul className="space-y-2.5 text-xs">
                             <li>
-                                <Link href="/faq" className="transition hover:text-black">الأسئلة الشائعة</Link>
+                                <TenantLink href="/faq" className="transition hover:text-black">الأسئلة الشائعة</TenantLink>
                             </li>
                             <li>
-                                <Link href="/shipping-policy" className="transition hover:text-black">سياسة الشحن</Link>
+                                <TenantLink href="/shipping-policy" className="transition hover:text-black">سياسة الشحن</TenantLink>
                             </li>
                             <li>
-                                <Link href="/return-policy" className="transition hover:text-black">سياسة الاسترجاع</Link>
+                                <TenantLink href="/return-policy" className="transition hover:text-black">سياسة الاسترجاع</TenantLink>
                             </li>
                         </ul>
                     </div>

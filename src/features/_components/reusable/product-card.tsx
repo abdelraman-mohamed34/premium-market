@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import TenantLink from '@/shared/components/TenantLink'
 
 export type Review = {
     id: number
@@ -80,7 +81,7 @@ function ProductCard({ product, hideWishlist = false, hideFooter = false, classN
     }
 
     return (
-        <Link href={`/products/${product.id}`}>
+        <TenantLink href={`/products/${product.id}`}>
             <div
                 className="group relative flex flex-col bg-gray-50 rounded overflow-hidden transition-all duration-300 h-full w-full"
                 onMouseEnter={() => setIsHovered(true)}
@@ -172,7 +173,7 @@ function ProductCard({ product, hideWishlist = false, hideFooter = false, classN
                     </div>
                 )}
             </div>
-        </Link>
+        </TenantLink>
     )
 }
 
