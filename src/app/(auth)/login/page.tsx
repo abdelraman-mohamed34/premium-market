@@ -149,7 +149,7 @@ function LoginPage() {
                     <button
                         type="submit"
                         disabled={isPending}
-                        className="w-full bg-black text-white py-3.5 text-xs font-bold uppercase tracking-widest rounded hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full bg-primary text-primary-foreground py-3.5 text-xs font-bold uppercase tracking-widest rounded hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {isPending ? (
                             <>

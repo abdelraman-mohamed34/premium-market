@@ -25,7 +25,11 @@ function Hero() {
                     </h1>
 
                     <h2 className="text-white text-4xl md:text-6xl font-bold uppercase tracking-tight mt-2">
-                        Up to 30% Off
+                        Up to
+                        <span className='text-primary font-bold mx-3'>
+                            30%
+                        </span>
+                        Off
                     </h2>
 
                     {/* Subtext (smaller, less prominent, from the image's small text) */}
@@ -35,7 +39,7 @@ function Hero() {
 
                     {/* Action Button (Blue background, white text, centered) */}
                     <div className="mt-10">
-                        <a href="/shop" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-10 rounded-md uppercase text-sm tracking-wide transition-colors">
+                        <a href="/shop" className="inline-block bg-primary hover:bg-blue-700 text-white font-semibold py-3 px-10 rounded-md uppercase text-sm tracking-wide transition-colors">
                             Shop Now
                         </a>
                     </div>

@@ -46,7 +46,7 @@ export default function CartPage() {
                 </p>
                 <TenantLink
                     href={requiresLogin ? '/login' : '/products'}
-                    className="mt-6 inline-flex items-center gap-2 bg-black px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+                    className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                     {requiresLogin ? 'Sign in' : 'Browse products'} <ArrowRight className="h-4 w-4" />
                 </TenantLink>
@@ -65,7 +65,7 @@ export default function CartPage() {
                 </p>
                 <TenantLink
                     href="/products"
-                    className="mt-6 inline-flex items-center gap-2 bg-black px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+                    className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                     Browse products <ArrowRight className="h-4 w-4" />
                 </TenantLink>
@@ -234,7 +234,7 @@ export default function CartPage() {
 
                     <TenantLink
                         href="/checkout"
-                        className="mt-6 block w-full rounded bg-black px-5 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+                        className="mt-6 block w-full rounded bg-primary px-5 py-3 text-center text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                     >
                         Proceed to checkout
                     </TenantLink>

@@ -246,7 +246,7 @@ function DetailPage() {
                             </button>
                         </div>
 
-                        <button type="button" onClick={handleAddToCart} disabled={addToCart.isPending || !tenantId} className="flex min-h-11 flex-1 items-center justify-center gap-2 bg-black px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60">
+                        <button type="button" onClick={handleAddToCart} disabled={addToCart.isPending || !tenantId} className="flex min-h-11 flex-1 items-center justify-center gap-2 bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60">
                             {addToCart.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                             {addToCart.isPending ? 'Adding...' : 'Add to Cart'}
                         </button>

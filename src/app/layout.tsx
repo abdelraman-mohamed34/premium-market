@@ -89,7 +89,11 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {isValidTenant ? (
-          <Providers dehydratedState={dehydratedState} tenantSlug={resolvedTenantSlug}>
+          <Providers
+            dehydratedState={dehydratedState}
+            tenantSlug={resolvedTenantSlug}
+            initialPrimaryColor={tenant?.branding?.primaryColor}
+          >
             {isDemoMode && !requestedSandbox && (
               <div
                 role="status"

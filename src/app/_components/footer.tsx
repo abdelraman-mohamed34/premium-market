@@ -12,10 +12,10 @@ export default function Footer() {
     const [email, setEmail] = useState('')
     const tenantSlug = useTenantSlug() ?? ''
     const sandbox = isSandboxTenant(tenantSlug)
-    const { tenantId } = useGraphood({ tenantSlug, enabled: !sandbox })
+    const { tenantId, tenant } = useGraphood({ tenantSlug, enabled: !sandbox })
     const { data: products } = useStoreProducts(tenantSlug, tenantId)
     const categoryLinks = [...new Set(products?.flatMap(product => product.tags ?? []) ?? [])].slice(0, 3)
-    const storeName = tenantSlug ? tenantSlug.toUpperCase() : 'STORE'
+    const storeName = tenant?.data.tenant.name.toUpperCase() ?? 'STORE'
 
     const handleSubscribe = (e: FormEvent) => {
         e.preventDefault()
@@ -30,7 +30,7 @@ export default function Footer() {
     return (
         <footer className="w-full border-t border-gray-200 bg-white text-gray-700">
             {/* Trust Badges */}
-            <div className="border-b border-zinc-800 bg-black py-8 text-white">
+            <div className="border-b border-zinc-800 bg-primary py-8 text-white">
                 <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 text-center sm:grid-cols-3 sm:px-6 lg:px-8">
                     <div className="flex flex-col items-center gap-2">
                         <Truck className="h-6 w-6 text-white" />
@@ -56,7 +56,7 @@ export default function Footer() {
 
                     {/* Brand Info */}
                     <div className="space-y-3">
-                        <h3 className="text-xl font-bold tracking-tight text-black">{storeName}</h3>
+                        <h3 className="text-xl font-bold tracking-tight text-primary">{storeName}</h3>
                         <p className="text-xs leading-relaxed text-gray-500">
                             متجرك المفضل لتسوق أحدث المنتجات والعروض بأعلى جودة وأفضل أسعار.
                         </p>
