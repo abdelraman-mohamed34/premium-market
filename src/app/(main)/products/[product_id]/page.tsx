@@ -93,12 +93,8 @@ function DetailPage() {
     const sandbox = isSandboxTenant(tenantSlug)
     const { tenantId } = useGraphood({ tenantSlug, enabled: !sandbox })
     const { data: products, isLoading } = useStoreProducts(tenantSlug, tenantId)
-    const addToCart = useStoreAddToCart(tenantSlug, tenantId)
-
-    // إمكانية إضافة حالة التحميل (Loading State) إذا كانت البيانات قادمة من API
-    // const [isLoading, setIsLoading] = useState(true)
-
     const product = products.find((item) => String(item.id) === String(productId))
+    const addToCart = useStoreAddToCart(tenantSlug, tenantId)
 
     const productImages = Array.isArray(product?.image)
         ? product.image
@@ -119,7 +115,6 @@ function DetailPage() {
         })
     }
 
-    // في حال كنت تنتظر بيانات من Backend يمكنك عرض الـ Skeleton هكذا:
     if (isLoading) return <DetailPageSkeleton />
 
     if (!product) {

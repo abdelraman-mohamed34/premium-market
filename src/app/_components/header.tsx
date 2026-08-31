@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import TenantLink from '@/shared/components/TenantLink' // التعديل هنا: استبدال next/link
+import TenantLink from '@/shared/components/TenantLink'
 import { ShoppingBag, User, Search, Menu, X } from 'lucide-react'
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
 import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
@@ -11,10 +11,11 @@ export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const tenantSlug = useTenantSlug() ?? ''
     const sandbox = isSandboxTenant(tenantSlug)
-    const { tenantId } = useGraphood({ tenantSlug, enabled: !sandbox })
+    const { tenantId, tenant } = useGraphood({ tenantSlug, enabled: !sandbox })
     const { data: cart } = useStoreCart(tenantSlug, tenantId)
 
     const itemCount = cart?.items?.length ?? 0
+    console.log(tenant?.data.tenant.branding?.primaryColor)
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur-md">
@@ -32,8 +33,12 @@ export default function Header() {
 
                 {/* Store Brand / Logo */}
                 <div className="flex items-center gap-8">
-                    <TenantLink href="/" className="text-xl font-bold tracking-tight text-black uppercase">
-                        {tenantSlug || 'Store'}
+                    <TenantLink
+                        href="/"
+                        style={{ color: tenant?.data.tenant.branding?.primaryColor ?? undefined }}
+                        className="text-xl font-bold tracking-tight uppercase"
+                    >
+                        {tenant?.data.tenant.name || 'Store'}
                     </TenantLink>
 
                     {/* Desktop Navigation Links */}
