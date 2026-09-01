@@ -15,8 +15,12 @@ function mapProductRow(row: Record<string, unknown>): Product {
 
 export async function getProduct(tenantId: string, id: string): Promise<Product> {
     const { supabase } = await tenantClient(tenantId);
-    return mapProductRow(unwrap(await supabase.from("products").select("*").eq("tenant_id", tenantId).eq("id", id).single()));
+    const cleanId = id.split(/[?#]/, 1)[0].trim();
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(cleanId)) throw new Error("Invalid product ID");
+    return mapProductRow(unwrap(await supabase.from("products").select("*").eq("tenant_id", tenantId).eq("id", cleanId).single()));
 }
+
+export const getProductById = getProduct;
 
 export async function createProduct({ tenantId, input }: { tenantId: string; input: CreateProductInput }): Promise<Product> {
     const { supabase } = await tenantClient(tenantId);

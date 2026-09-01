@@ -2,6 +2,7 @@
 import { addToCartSchema, cartSchema, updateCartItemQuantitySchema } from "@/schemas/cart.schema";
 import { authContext } from "./action-utils";
 import { getCart, saveCart } from "@/services/cart.service";
+import { getProductById } from "@/services/product.service";
 import { cartCatalog } from "@/lib/products/cart-catalog";
 export async function getCartAction() { try { const c = await authContext(); return { success: true as const, data: await getCart(c.tenantId, c.userId) }; } catch (e) { return { success: false as const, error: e instanceof Error ? e.message : "Unable to load cart" }; } }
 export async function saveCartAction(input: unknown) { const parsed = cartSchema.safeParse(input); if (!parsed.success) return { success: false as const, error: "Invalid cart" }; try { const c = await authContext(); return { success: true as const, data: await saveCart(c.tenantId, c.userId, parsed.data) }; } catch (e) { return { success: false as const, error: e instanceof Error ? e.message : "Unable to save cart" }; } }
@@ -16,12 +17,15 @@ export async function addToCartAction(input: unknown) {
     if (!parsed.success) return { success: false as const, error: "Invalid product options" };
     try {
         const c = await authContext();
-        const product = cartCatalog.find((item) => String(item.id) === String(parsed.data.productId));
+        const rawProductId = String(parsed.data.productId).split(/[?#]/, 1)[0].trim();
+        const product = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(rawProductId)
+            ? await getProductById(c.tenantId, rawProductId)
+            : cartCatalog.find((item) => String(item.id) === rawProductId);
         if (!product) throw new Error("Product not found");
         if (parsed.data.selectedColor && !product.colors?.includes(parsed.data.selectedColor)) throw new Error("Selected color is unavailable");
 
         const price = product.price;
-        const image = product.image;
+        const image = 'images' in product ? product.images[0] : product.image;
         const cart = await getCart(c.tenantId, c.userId);
         const items = [...(cart?.items ?? [])];
         const existingIndex = items.findIndex((item) => String(item.productId) === String(product.id) && item.selectedColor === parsed.data.selectedColor && item.selectedSize === parsed.data.selectedSize);
