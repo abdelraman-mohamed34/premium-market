@@ -7,6 +7,7 @@ import { isSandboxTenant, useStoreAddToCart, useStoreProducts } from '@/hooks/us
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
 import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
 import { Loader2, Minus, Plus } from 'lucide-react'
+import { useProductReviews } from '@/hooks/use-reviews'
 
 // 1. مكون الـ Skeleton الرئيسي
 function DetailPageSkeleton() {
@@ -94,6 +95,10 @@ function DetailPage() {
     const { tenantId } = useGraphood({ tenantSlug, enabled: !sandbox })
     const { data: products, isLoading } = useStoreProducts(tenantSlug, tenantId)
     const product = products.find((item) => String(item.id) === String(productId))
+    const productUuid = typeof productId === 'string' ? productId : ''
+    const liveReviews = useProductReviews(productUuid, Boolean(productUuid && tenantId))
+    const reviewCount = liveReviews.data?.length ?? product?.reviewsCount ?? 0
+    const averageRating = liveReviews.data?.length ? liveReviews.data.reduce((total, review) => total + review.rating, 0) / liveReviews.data.length : product?.rating ?? 0
     const addToCart = useStoreAddToCart(tenantSlug, tenantId)
 
     const productImages = Array.isArray(product?.image)
@@ -178,13 +183,11 @@ function DetailPage() {
                             {product.title}
                         </h1>
 
-                        {product.rating && (
-                            <div className="flex items-center gap-2 mt-2">
-                                <StarRating rating={product.rating} />
-                                <span className="text-xs font-bold text-gray-800">{product.rating}</span>
-                                <span className="text-xs text-gray-400">({product.reviewsCount || 0} reviews)</span>
+                        <div className="flex items-center gap-2 mt-2">
+                                <StarRating rating={averageRating} />
+                                <span className="text-xs font-bold text-gray-800">{averageRating.toFixed(1)}</span>
+                                <span className="text-xs text-gray-400">({reviewCount} تقييمات)</span>
                             </div>
-                        )}
                     </div>
 
                     <div className="flex items-center gap-3">

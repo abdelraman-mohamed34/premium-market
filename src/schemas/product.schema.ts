@@ -55,7 +55,7 @@ export const productSchema = z.object({
             return Number.isNaN(date.getTime()) ? undefined : date.toISOString()
         }
         return value
-    }, z.string().datetime().optional()),
+    }, z.string().datetime({ offset: true }).optional()),
     updatedAt: z.preprocess((value) => {
         if (value instanceof Date) return Number.isNaN(value.getTime()) ? undefined : value.toISOString()
         if (typeof value === 'string') {
@@ -63,7 +63,7 @@ export const productSchema = z.object({
             return Number.isNaN(date.getTime()) ? undefined : date.toISOString()
         }
         return value
-    }, z.string().datetime().optional()),
+    }, z.string().datetime({ offset: true }).optional()),
 })
 
 export const createProductSchema = productSchema

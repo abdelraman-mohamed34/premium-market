@@ -4,6 +4,8 @@ import React from 'react'
 import { Review } from '@/features/_components/reusable/product-card'
 import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
+import ProductReviewForm from '@/features/reviews/components/ProductReviewForm'
+import { useProductReviews } from '@/hooks/use-reviews'
 
 type ProductReviewsProps = {
     rating?: number
@@ -32,23 +34,29 @@ export default function ProductReviews({ rating = 0, reviewsCount = 0, reviews =
     const tenant_slug = useTenantSlug()
     const slug = tenant_slug ?? ""
     const { tenant, health } = useGraphood({ tenantSlug: slug })
-    console.log(tenant_slug)
+    const productId = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() ?? '' : ''
+    const liveReviews = useProductReviews(productId, Boolean(productId && tenant?.data?.tenant?.id))
+    const displayedReviews = liveReviews.data ?? reviews
+    const formatReviewDate = (value: string | Date) => {
+        const date = new Date(value)
+        return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' })
+    }
 
     return (
         <section className="mt-16 pt-10 border-t border-gray-200 flex justify-center gap-8">
             <div className="space-y-4 w-full max-w-5xl">
                 <h2 className="text-xl font-bold uppercase text-gray-900 tracking-tight mb-2">
-                    Customer Reviews ({reviewsCount})
+                    Customer Reviews ({displayedReviews.length || reviewsCount})
                 </h2>
-                {reviews.length > 0 ? (
-                    reviews.map((rev) => (
+                {displayedReviews.length > 0 ? (
+                    displayedReviews.map((rev) => (
                         <div key={rev.id} className="p-4 bg-white rounded border border-gray-100 shadow-sm space-y-2">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-sm text-gray-900">{rev.author}</span>
+                                <span className="font-semibold text-sm text-gray-900">{rev.author || 'Customer'}</span>
                                     <StarRating rating={rev.rating} size="w-3.5 h-3.5" />
                                 </div>
-                                <span className="text-xs text-gray-400">{rev.date}</span>
+                                <span className="text-xs text-gray-400">{formatReviewDate('createdAt' in rev ? rev.createdAt : rev.date)}</span>
                             </div>
                             <p className="text-xs text-gray-600 leading-relaxed">{rev.comment}</p>
                         </div>
@@ -56,6 +64,7 @@ export default function ProductReviews({ rating = 0, reviewsCount = 0, reviews =
                 ) : (
                     <p className="text-sm text-gray-500 italic">No reviews yet for this product.</p>
                 )}
+                {productId && <ProductReviewForm productId={productId} />}
             </div>
         </section>
     )
