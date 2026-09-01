@@ -38,6 +38,7 @@ export const addToCartSchema = z.object({
     productId: z.string().uuid().or(z.number()),
     variantId: z.string().uuid().optional(),
     quantity: z.number().int().positive().default(1),
+    options: z.record(z.string(), z.string()).optional().default({}),
     selectedColor: z.string().optional(),
     selectedSize: productSizeSchema.optional(),
 })

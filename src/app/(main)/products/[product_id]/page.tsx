@@ -111,6 +111,7 @@ function DetailPage() {
         addToCart.mutate({
             productId: product.id,
             quantity,
+            options: {},
             selectedColor: product.colors?.[selectedColor],
         })
     }
@@ -162,7 +163,6 @@ function DetailPage() {
                     </div>
                 </div>
 
-                {/* تفاصيل المنتج */}
                 <div className="flex flex-col justify-start space-y-6">
                     <div>
                         {product.tags && product.tags.length > 0 && (

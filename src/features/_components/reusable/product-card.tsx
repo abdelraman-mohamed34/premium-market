@@ -12,7 +12,7 @@ export type Review = {
 }
 
 export type Product = {
-    id: number
+    id: string | number
     tenant_id?: string
     title: string
     price: string
