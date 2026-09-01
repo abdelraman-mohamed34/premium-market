@@ -20,7 +20,8 @@ export async function getProduct(tenantId: string, id: string): Promise<Product>
 
 export async function createProduct({ tenantId, input }: { tenantId: string; input: CreateProductInput }): Promise<Product> {
     const { supabase } = await tenantClient(tenantId);
-    const value = { tenant_id: tenantId, title: input.title, slug: input.slug, description: input.description, price: input.price, compare_at_price: input.compareAtPrice ?? null, images: input.images, colors: input.colors, tags: input.tags, category_id: input.categoryId ?? null, variants: input.variants, in_stock: input.inStock, is_featured: input.isFeatured };
+    const id = crypto.randomUUID();
+    const value = { id, tenant_id: tenantId, title: input.title, slug: id, description: input.description, price: input.price, compare_at_price: input.compareAtPrice ?? null, images: input.images, colors: input.colors, tags: input.tags, category_id: input.categoryId ?? null, variants: input.variants, in_stock: input.inStock, is_featured: input.isFeatured };
     return mapProductRow(unwrap(await supabase.from("products").insert(value).select().single()));
 }
 

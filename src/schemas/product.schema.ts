@@ -75,6 +75,7 @@ export const createProductSchema = productSchema
         createdAt: true,
         updatedAt: true,
         tenant_id: true,
+        slug: true,
     })
 
     .extend({
