@@ -184,10 +184,10 @@ function DetailPage() {
                         </h1>
 
                         <div className="flex items-center gap-2 mt-2">
-                                <StarRating rating={averageRating} />
-                                <span className="text-xs font-bold text-gray-800">{averageRating.toFixed(1)}</span>
-                                <span className="text-xs text-gray-400">({reviewCount} تقييمات)</span>
-                            </div>
+                            <StarRating rating={averageRating} />
+                            <span className="text-xs font-bold text-gray-800">{averageRating.toFixed(1)}</span>
+                            <span className="text-xs text-gray-400">({reviewCount} تقييمات)</span>
+                        </div>
                     </div>
 
                     <div className="flex items-center gap-3">

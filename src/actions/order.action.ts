@@ -1,7 +1,8 @@
 "use server";
 import { checkoutInputSchema } from "@/schemas/order.schema";
 import { authContext } from "./action-utils";
-import { checkoutCart, listOrders } from "@/services/order.service";
+import { checkoutCart, listOrders, listTenantOrders, getDashboardStats, updateTenantOrderStatus } from "@/services/order.service";
+import { orderStatusSchema } from "@/schemas/order.schema";
 import { getCart } from "@/services/cart.service";
 import { cartCatalog } from "@/lib/products/cart-catalog";
 import { getProductById } from "@/services/product.service";
@@ -44,3 +45,6 @@ export async function createOrderAction(input: unknown) {
     } catch (e) { return { success: false as const, error: e instanceof Error ? e.message : "Unable to create order" }; }
 }
 export const checkoutAction = createOrderAction;
+export async function listTenantOrdersAction() { try { const c = await authContext(); return { success: true as const, data: await listTenantOrders(c.tenantId) }; } catch (e) { return { success: false as const, error: e instanceof Error ? e.message : "Unable to load orders" }; } }
+export async function dashboardStatsAction() { try { const c = await authContext(); return { success: true as const, data: await getDashboardStats(c.tenantId) }; } catch (e) { return { success: false as const, error: e instanceof Error ? e.message : "Unable to load dashboard" }; } }
+export async function updateOrderStatusAction(input: unknown) { const value = input as { orderId?: unknown; status?: unknown }; const parsed = orderStatusSchema.safeParse(value.status); if (typeof value.orderId !== "string" || !parsed.success) return { success: false as const, error: "Invalid order status" }; try { const c = await authContext(); return { success: true as const, data: await updateTenantOrderStatus(c.tenantId, value.orderId, parsed.data) }; } catch (e) { return { success: false as const, error: e instanceof Error ? e.message : "Unable to update order" }; } }
