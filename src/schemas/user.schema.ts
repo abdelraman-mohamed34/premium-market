@@ -71,7 +71,7 @@ export const changePasswordSchema = z
 
 export const addressSchema = z.object({
     id: z.string().uuid().optional(),
-    userId: z.string().uuid('Invalid user ID'), // Foreign key referencing profile.id
+    userId: z.string().uuid('Invalid user ID').nullable().optional(), // Foreign key referencing profile.id
     title: z.string().min(1, 'Address label is required (e.g. Home, Office)'),
     fullName: z.string().min(3, 'Recipient name is required'),
     phone: phoneSchema,

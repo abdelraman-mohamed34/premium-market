@@ -41,9 +41,9 @@ export const orderSchema = z.object({
     shippingFee: z.number().nonnegative(),
     discountAmount: z.number().nonnegative().default(0),
     total: z.number().nonnegative(),
-    notes: z.string().optional(),
-    createdAt: z.string().datetime().or(z.date()).optional(),
-    updatedAt: z.coerce.date().optional(),
+    notes: z.string().nullable().optional(),
+    createdAt: z.union([z.string(), z.date()]).nullable().optional(),
+    updatedAt: z.union([z.string(), z.date()]).nullable().optional(),
 })
 
 export const checkoutInputSchema = z.object({
