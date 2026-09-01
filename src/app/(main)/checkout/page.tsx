@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useState, type FormEvent } from 'react'
 import { Loader2, LockKeyhole } from 'lucide-react'
 import { toast } from 'sonner'
@@ -10,10 +9,11 @@ import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
 import { useCart } from '@/hooks/use-cart'
 import { useCreateOrder } from '@/hooks/use-checkout'
 import TenantLink from '@/shared/components/TenantLink'
+import { useTenantRouter } from '@/shared/hooks/useTenantRouter'
 const money = new Intl.NumberFormat('ar-EG', { style: 'currency', currency: 'EGP', maximumFractionDigits: 2 })
 const initialForm: CheckoutInput = { shippingAddress: { title: 'Home', fullName: '', phone: '', governorate: '', city: '', streetAddress: '', buildingNo: '', floorNo: '', apartmentNo: '', nearestLandmark: '', isDefault: false }, paymentMethod: 'cod', notes: '' }
 export default function CheckoutPage() {
-    const router = useRouter(); const tenantSlug = useTenantSlug() ?? ''; const { tenantId } = useGraphood({ tenantSlug }); const cart = useCart(tenantId); const createOrder = useCreateOrder(tenantId); const [form, setForm] = useState<CheckoutInput>(initialForm)
+    const router = useTenantRouter(); const tenantSlug = useTenantSlug() ?? ''; const { tenantId } = useGraphood({ tenantSlug }); const cart = useCart(tenantId); const createOrder = useCreateOrder(tenantId); const [form, setForm] = useState<CheckoutInput>(initialForm)
     const setAddress = (field: keyof CheckoutInput['shippingAddress'], value: string) => setForm(current => ({ ...current, shippingAddress: { ...current.shippingAddress, [field]: value } }))
     const submit = (event: FormEvent) => { event.preventDefault(); const parsed = checkoutInputSchema.safeParse(form); if (!parsed.success) { toast.error(parsed.error.issues[0]?.message || 'Please check your shipping details'); return } createOrder.mutate(parsed.data, { onSuccess: result => { if (result.success) router.push(`/orders/${result.data.orderId}/confirmation?number=${encodeURIComponent(result.data.orderNumber)}`) } }) }
     if (cart.isLoading) return <div className="flex min-h-[55vh] items-center justify-center"><Loader2 className="h-6 w-6 animate-spin" /></div>
