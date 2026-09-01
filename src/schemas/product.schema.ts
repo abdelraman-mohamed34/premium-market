@@ -30,7 +30,7 @@ export const productSchema = z.object({
     description: z.string().min(5, "description too short"),
 
     price: z.number().positive('Price must be greater than 0'),
-    compareAtPrice: z.number().positive().optional(),
+    compareAtPrice: z.number().positive().nullable().optional(),
     discountLabel: z.string().optional(),
 
     images: z.array(z.string().url('Invalid image URL')).min(1, 'At least one image is required'),
@@ -38,7 +38,7 @@ export const productSchema = z.object({
     colors: z.array(z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)).default([]),
 
     tags: z.array(z.string()).default([]),
-    categoryId: z.string().uuid().optional(),
+    categoryId: z.string().uuid().nullable().optional(),
 
     rating: z.number().min(0).max(5).default(0),
     reviewsCount: z.number().int().nonnegative().default(0),
@@ -48,8 +48,22 @@ export const productSchema = z.object({
     inStock: z.boolean().default(true),
     isFeatured: z.boolean().default(false),
 
-    createdAt: z.string().datetime().or(z.date()).optional(),
-    updatedAt: z.coerce.date().optional(),
+    createdAt: z.preprocess((value) => {
+        if (value instanceof Date) return Number.isNaN(value.getTime()) ? undefined : value.toISOString()
+        if (typeof value === 'string') {
+            const date = new Date(value)
+            return Number.isNaN(date.getTime()) ? undefined : date.toISOString()
+        }
+        return value
+    }, z.string().datetime().optional()),
+    updatedAt: z.preprocess((value) => {
+        if (value instanceof Date) return Number.isNaN(value.getTime()) ? undefined : value.toISOString()
+        if (typeof value === 'string') {
+            const date = new Date(value)
+            return Number.isNaN(date.getTime()) ? undefined : date.toISOString()
+        }
+        return value
+    }, z.string().datetime().optional()),
 })
 
 export const createProductSchema = productSchema
@@ -62,11 +76,15 @@ export const createProductSchema = productSchema
         updatedAt: true,
         tenant_id: true,
     })
+
     .extend({
         title: z.string().trim().min(3, 'Title is required'),
-        price: z.number().positive('Price is required'),
+        price: z.preprocess((value) => value === '' || (typeof value === 'number' && Number.isNaN(value)) ? undefined : value, z.number().positive('Price is required')),
         images: z.array(z.string().url()).min(1, 'Provide at least one image'),
     })
+
+export const createProductInputSchema = createProductSchema
+export type CreateProductInput = z.infer<typeof createProductInputSchema>
 
 export const updateProductSchema = createProductSchema.partial()
 
@@ -81,6 +99,5 @@ export type ProductSize = z.infer<typeof productSizeSchema>
 export type ProductReview = z.infer<typeof productReviewSchema>
 export type ProductVariant = z.infer<typeof productVariantSchema>
 export type Product = z.infer<typeof productSchema>
-export type CreateProductInput = z.infer<typeof createProductSchema>
 export type UpdateProductInput = z.infer<typeof updateProductSchema>
 export type CreateReviewInput = z.infer<typeof createReviewSchema>

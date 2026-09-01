@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, type FormEvent } from 'react'
-import TenantLink from '@/shared/components/TenantLink' // التعديل هنا: استبدال next/link
+import TenantLink from '@/shared/components/TenantLink'
 import { ShieldCheck, Truck, RefreshCw, Send } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
