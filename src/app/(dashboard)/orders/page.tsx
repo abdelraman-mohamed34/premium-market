@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { Search } from 'lucide-react'
+import { Eye, Search, X } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useTenantSlug } from '@/app/shared/lib/providers/providers'
 import { useGraphood } from '@/app/shared/lib/graphood/hooks/use-graphood'
@@ -51,6 +51,7 @@ export default function DashboardOrdersPage() {
         const query = search.trim()
         router.push(query ? `/orders?search=${encodeURIComponent(query)}` : '/orders', { scroll: false })
     }
+    const clearSearch = () => { setSearch(''); router.push('/orders', { scroll: false }) }
 
     if (orders.isLoading) {
         return <div className="p-6 text-center text-gray-500">جاري تحميل الطلبات...</div>
@@ -73,6 +74,7 @@ export default function DashboardOrdersPage() {
                         className="h-11 w-full rounded-lg bg-transparent py-2 pr-10 pl-3 text-sm text-gray-900 outline-none placeholder:text-gray-400"
                         aria-label="البحث برقم الطلب"
                     />
+                    {search && <button type="button" onClick={clearSearch} className="absolute left-2 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center text-gray-400 hover:text-gray-700" aria-label="مسح البحث"><X className="h-4 w-4" /></button>}
                     <button type="submit" className="sr-only">بحث</button>
                 </form>
             </div>
@@ -86,6 +88,7 @@ export default function DashboardOrdersPage() {
                             <th className="px-5 py-3">الإجمالي</th>
                             <th className="px-5 py-3">الحالة</th>
                             <th className="px-5 py-3">التاريخ</th>
+                            <th className="px-5 py-3">التفاصيل</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -119,6 +122,7 @@ export default function DashboardOrdersPage() {
                                 <td className="px-5 py-4 text-gray-500">
                                     {order.createdAt || order.created_at ? new Date(order.createdAt ?? order.created_at).toLocaleDateString('ar-EG') : '-'}
                                 </td>
+                                <td className="px-5 py-4"><button type="button" onClick={() => router.push(`/orders?search=${encodeURIComponent(order.orderNumber ?? order.order_number ?? '')}`, { scroll: false })} className="grid h-8 w-8 place-items-center text-gray-500 hover:bg-gray-100 hover:text-gray-900" aria-label="عرض تفاصيل الطلب"><Eye className="h-4 w-4" /></button></td>
                             </tr>
                         ))}
                     </tbody>

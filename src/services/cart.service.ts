@@ -10,9 +10,10 @@ function fromRow(row: Record<string, unknown>): Cart {
 
 export async function getCart(tenantId: string, userId: string): Promise<Cart | null> {
     const { supabase } = await tenantClient(tenantId);
-    const result = await supabase.from("carts").select("*").eq("tenant_id", tenantId).eq("user_id", userId).maybeSingle();
+    const result = await supabase.from("carts").select("*").eq("tenant_id", tenantId).eq("user_id", userId).order("updated_at", { ascending: false }).limit(1);
     if (result.error) throw new Error(result.error.message);
-    return result.data ? fromRow(result.data as Record<string, unknown>) : null;
+    const row = result.data?.[0];
+    return row ? fromRow(row as Record<string, unknown>) : null;
 }
 
 export async function saveCart(tenantId: string, userId: string, cart: Cart): Promise<Cart> {
