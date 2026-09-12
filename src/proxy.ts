@@ -37,7 +37,7 @@ export function proxy(request: NextRequest) {
 
     const requestHeaders = new Headers(request.headers);
     if (tenantSlug) {
-        requestHeaders.set("x-tenant-slug", tenantSlug.toLowerCase().trim());
+        requestHeaders.set(X-tenant-slug", tenantSlug.toLowerCase().trim());
     }
 
     return NextResponse.next({
